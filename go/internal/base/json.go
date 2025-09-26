@@ -119,17 +119,16 @@ func SchemaAsMap(s *jsonschema.Schema) map[string]any {
 	return m
 }
 
-var jsonMarkdownRegex = regexp.MustCompile("```(json)?((\n|.)*?)```")
+var jsonMarkdownRegex = regexp.MustCompile("```json((?s:.*?))?```")
 
 // ExtractJSONFromMarkdown returns the contents of the first fenced code block in
 // the markdown text md. If there is none, it returns md.
 func ExtractJSONFromMarkdown(md string) string {
-	// TODO: improve this
 	matches := jsonMarkdownRegex.FindStringSubmatch(md)
 	if matches == nil {
 		return md
 	}
-	return matches[2]
+	return strings.TrimSpace(matches[1])
 }
 
 // GetJsonObjectLines splits a string by newlines, trims whitespace from each line,
